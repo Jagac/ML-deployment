@@ -1,1 +1,1 @@
-Made a fairly simple ml script and wanted to learn flask.
+Deploying ml projects using various frameworks.
