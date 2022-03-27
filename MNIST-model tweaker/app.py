@@ -7,6 +7,7 @@ num_epochs = st.sidebar.slider('Number of Epochs',1,32)
 activation = st.sidebar.text_input('Activation Function')
 
 if st.button('Train the model'):
+    'TRAINING IN PROGRESS...'
     import pandas as pd
     import tensorflow as tf
     from tensorflow.keras.datasets import mnist
@@ -35,6 +36,7 @@ if st.button('Train the model'):
 
 
 if st.button('Evaluate the model'):
+
     import pandas as pd 
     import matplotlib.pyplot as plt
 
