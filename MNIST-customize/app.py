@@ -4,7 +4,8 @@ st.title('MNIST Customizable Neural Network')
 
 num_neurons = st.sidebar.slider('Number of Neurons in the Hidden Layer',1,64)
 num_epochs = st.sidebar.slider('Number of Epochs',1,32)
-activation = st.sidebar.text_input('Activation Function')
+activation = st.sidebar.selectbox('Activation Function',
+('relu', 'tanh', 'sigmoid', 'softmax', 'selu', 'elu','exponential'))
 
 if st.button('Train the model'):
     'TRAINING IN PROGRESS...'
@@ -33,6 +34,7 @@ if st.button('Train the model'):
     save_cp = ModelCheckpoint('model', save_best_only=True)
     history_cp = tf.keras.callbacks.CSVLogger('history.csv', separator=',')
     model.fit(X_train,y_train, validation_data=(X_test,y_test), epochs=num_epochs, callbacks=[save_cp, history_cp])
+    'DONE!!!'
 
 
 if st.button('Evaluate the model'):
