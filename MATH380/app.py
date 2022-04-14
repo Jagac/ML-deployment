@@ -72,36 +72,40 @@ if st.button('Run ARIMA Model'):
     import pandas as pd
     import numpy as np                 
     import statsmodels.api as sm  
+    import matplotlib.pyplot as plt
     from sklearn.metrics import mean_squared_error  
     'DONE'
     df3 = pd.read_csv('walwortwheightedmean.csv')
     df_temp=df3[['Municipality','Year','Weighted Mean']]
-    df_temp['Weighted Mean']
+    muns=['Bloomfield town', 'Whitewater city', 'Delavan city',
+       'Darien town', 'Walworth village', 'Sharon village',
+       'Lake Geneva city', 'Bloomfield village', 'Elkhorn city',
+       'Walworth town', 'Linn town', 'Williams Bay village',
+       'Genoa City village', 'Delavan town', 'Geneva town',
+       'Darien village', 'Richmond town', 'Sharon town',
+       'Fontana-on-Geneva Lake village', 'Whitewater town',
+       'East Troy village', 'Spring Prairie town', 'East Troy town',
+       'Troy town', 'La Grange town', 'Lyons town', 'Lafayette town',
+       'Sugar Creek town', 'Mukwonago village', 'Burlington city']
+    def ARIMA(df):
+        x=df.sort_values('Year')['Weighted Mean']
+        model = sm.tsa.arima.ARIMA(x.to_numpy(), order=(0,0,0))
+        model_fit = model.fit(x)
+        output=model_fit.forecast()
+        return output
+    for x in muns:
+        [output]=ARIMA(df_temp[df_temp['Municipality']==x])
+        row={'Municipality':x,'Year':2021,'Weighted Mean':output}
+        print(row)
+        df_temp=df_temp.append(row,ignore_index=True)
+    def plot_graph(mun):
+        global df_temp
+        ddf=df_temp[df_temp['Municipality']==mun].sort_values('Year')
+        fig, ax = plt.subplots()
+        ax.plot(ddf['Year'], ddf['Weighted Mean'])
+        #ax.set_xlabel(ddf['Year'])
+        return fig
+    for mun in muns:
+        st.write(mun)
+        st.pyplot(plot_graph(mun))
 
-
-    train_data, test_data = df_temp[0:int(len(df_temp)*0.7)], df_temp[int(len(df_temp)*0.7):]
-    training_data = train_data['Weighted Mean'].values
-    test_data = test_data['Weighted Mean'].values
-    history = [x for x in training_data]
-    model_predictions = []
-    N_test_observations = len(test_data)
-    for time_point in range(N_test_observations):
-        model = sm.tsa.arima.ARIMA(history, order=(0,0,0))
-        model_fit = model.fit()
-        output = model_fit.forecast()
-        yhat = output[0]
-        model_predictions.append(yhat)
-        true_test_value = test_data[time_point]
-        history.append(true_test_value)
-    MSE_error = mean_squared_error(test_data, model_predictions)
-
-    
-
-    
-    
-
-
-
-
-        
-    
