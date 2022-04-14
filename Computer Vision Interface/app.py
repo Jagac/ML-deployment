@@ -65,36 +65,32 @@ app_mode = st.sidebar.selectbox('Choose Mode',
 
 if app_mode == 'Image':
     drawing_spec = mp_drawing.DrawingSpec(thickness=2, circle_radius=1)
-
-    st.sidebar.markdown('---')
-
-    st.markdown (
-        """
-        <style>
-        [data-testid="stSidebar"][aria-expanded="true"] > div:first-child{
-            width: 350 px
-        }
-        [data-testid="stSidebar"][aria-expanded="false"] > div:first-child{
-            width: 350px
-            margin-left: -350px
-        }
-        </style>
-        
-        """,
-        unsafe_allow_html=True,
-        )
-
-    st.markdown("**Detected Faces**")
-    kpi1_text = st.markdown("0")
-
-    max_faces = st.sidebar.number_input('Maximum Number of Faces', value = 2, min_value = 1)
-    st.sidebar.markdown('---')
-    detection_confidence = st.sidebar.slider('Min Detection Confidence', min_value=0.0,max_value=1.0, value = 0.5)
-    st.sidebar.markdown('---')
-
-    img_file_buffer = st.sidebar.file_uploader('Choose File', type =["jpg","png","jpeg"])
     
-    
+    st.subheader('We are applying Face Mesh on an Image')
+
+    st.sidebar.text('Params for Image')
+    st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+        width: 400px;
+    }
+    [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+        width: 400px;
+        margin-left: -400px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+    detection_confidence = st.sidebar.slider('Min Detection Confidence', min_value =0.0,max_value = 1.0,value = 0.5)
+    max_faces = st.sidebar.number_input('Maximum Number of Faces',value =2,min_value = 1)
+
+
+
+    img_file_buffer = st.sidebar.file_uploader("Upload an image", type=[ "jpg", "jpeg",'png'])
+
     if img_file_buffer is not None:
         image = np.array(Image.open(img_file_buffer))
 
