@@ -1,16 +1,10 @@
 import streamlit as st
 
-
                
-st.title('Model Gui')
+st.title('G1 Model In Action')
 
-
-st.write("This is a cool front end for our model. Feel free to change the weights and the app will do all the calculations for you")
+st.write("This is a cool front end for our model. Feel free to change the weights and the app will do all the calculations for you !!!")
 st.write("")
-
-
-
-
 
 w1 = st.sidebar.slider('No health insurance coverage',0.01,1.0)
 w2 = st.sidebar.slider('Unemployed',0.01,1.0)
@@ -74,7 +68,6 @@ if st.button('Run ARIMA Model'):
     import statsmodels.api as sm  
     import matplotlib.pyplot as plt
     from sklearn.metrics import mean_squared_error  
-    'DONE'
     df3 = pd.read_csv('walwortwheightedmean.csv')
     df_temp=df3[['Municipality','Year','Weighted Mean']]
     muns=['Bloomfield town', 'Whitewater city', 'Delavan city',
@@ -89,14 +82,13 @@ if st.button('Run ARIMA Model'):
        'Sugar Creek town', 'Mukwonago village', 'Burlington city']
     def ARIMA(df):
         x=df.sort_values('Year')['Weighted Mean']
-        model = sm.tsa.arima.ARIMA(x.to_numpy(), order=(0,0,0))
+        model = sm.tsa.arima.ARIMA(x.to_numpy(), order=(1,1,0))
         model_fit = model.fit(x)
         output=model_fit.forecast()
         return output
     for x in muns:
         [output]=ARIMA(df_temp[df_temp['Municipality']==x])
         row={'Municipality':x,'Year':2021,'Weighted Mean':output}
-        print(row)
         df_temp=df_temp.append(row,ignore_index=True)
     def plot_graph(mun):
         global df_temp
@@ -105,7 +97,10 @@ if st.button('Run ARIMA Model'):
         ax.plot(ddf['Year'], ddf['Weighted Mean'])
         #ax.set_xlabel(ddf['Year'])
         return fig
-    for mun in muns:
-        st.write(mun)
+    sortedMuns=df_temp[df_temp['Year']==2021].sort_values('Weighted Mean',ascending=False)['Municipality']
+    #sortedMuns=df_temp[df_temp['Year'==2021]].sort_values('Weighted Mean')['Municipality'].unique()
+    for mun in sortedMuns:
+        st.write(mun,'Weighted Mean:',df_temp[df_temp['Municipality']==mun][(df_temp['Year']==2020)|(df_temp['Year']==2021)].reset_index(drop=True))
         st.pyplot(plot_graph(mun))
 
+    df_temp.to_csv('arimapredict.csv')
