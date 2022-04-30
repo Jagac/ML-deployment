@@ -4,7 +4,7 @@ import streamlit as st
 st.title('G1 Model In Action')
 
 st.write("This is a cool front end for our model. Feel free to change the weights and the app will do all the calculations for you !!!")
-st.write("")
+
 
 w1 = st.sidebar.slider('No health insurance coverage',0.01,1.0)
 w2 = st.sidebar.slider('Unemployed',0.01,1.0)
@@ -102,5 +102,5 @@ if st.button('Run ARIMA Model'):
     for mun in sortedMuns:
         st.write(mun,'Weighted Mean:',df_temp[df_temp['Municipality']==mun][(df_temp['Year']==2020)|(df_temp['Year']==2021)].reset_index(drop=True))
         st.pyplot(plot_graph(mun))
-
+        
     df_temp.to_csv('arimapredict.csv')
